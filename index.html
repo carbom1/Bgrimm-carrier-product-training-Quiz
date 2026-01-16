@@ -15,6 +15,9 @@
         .header-img { width: 100%; height: 150px; background-color: #0056b3; border-radius: 15px 15px 0 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold; }
         .btn-custom { background-color: #0056b3; color: white; }
         .btn-custom:hover { background-color: #004494; color: white; }
+        .list-group-item { border: none; padding: 15px; margin-bottom: 5px; background-color: #f8f9fa; border-radius: 10px !important; }
+        .list-group-item:hover { background-color: #e9ecef; cursor: pointer; }
+        .form-check-input:checked + .form-check-label { color: #0056b3; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -47,50 +50,9 @@
 
             <h5 class="fw-bold mb-3">ตอบคำถามชิงรางวัล</h5>
             <form id="quizForm">
-                <!-- คำถามข้อ 1 -->
-                <div class="mb-4 p-3 bg-light rounded">
-                    <p class="fw-bold">1. ใส่คำถามข้อที่ 1 ที่นี่?</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q1" value="A" id="q1a">
-                        <label class="form-check-label" for="q1a">ก. ตัวเลือกที่ 1</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q1" value="B" id="q1b">
-                        <label class="form-check-label" for="q1b">ข. ตัวเลือกที่ 2 (ถูก)</label>
-                    </div>
-                </div>
-
-                <!-- คำถามข้อ 2 -->
-                <div class="mb-4 p-3 bg-light rounded">
-                    <p class="fw-bold">2. ใส่คำถามข้อที่ 2 ที่นี่?</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q2" value="A" id="q2a">
-                        <label class="form-check-label" for="q2a">ก. ตัวเลือกที่ 1 (ถูก)</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q2" value="B" id="q2b">
-                        <label class="form-check-label" for="q2b">ข. ตัวเลือกที่ 2</label>
-                    </div>
-                </div>
-
-                <!-- คำถามข้อ 3 -->
-                <div class="mb-4 p-3 bg-light rounded">
-                    <p class="fw-bold">3. ใส่คำถามข้อที่ 3 ที่นี่?</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q3" value="A" id="q3a">
-                        <label class="form-check-label" for="q3a">ก. ตัวเลือกที่ 1</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q3" value="B" id="q3b">
-                        <label class="form-check-label" for="q3b">ข. ตัวเลือกที่ 2</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q3" value="C" id="q3c">
-                        <label class="form-check-label" for="q3c">ค. ตัวเลือกที่ 3 (ถูก)</label>
-                    </div>
-                </div>
-
-                <button type="button" onclick="submitQuiz()" class="btn btn-success w-100 btn-lg shadow-sm">ส่งคำตอบ</button>
+                <div id="questionsContainer"></div> <!-- คำถามจะถูกสุ่มและสร้างที่นี่ -->
+                
+                <button type="button" onclick="submitQuiz()" class="btn btn-success w-100 btn-lg shadow-sm mt-3">ส่งคำตอบ</button>
             </form>
 
             <div class="mt-5 text-center">
@@ -123,47 +85,84 @@
         </div>
     </div>
 
-    <!-- ส่วนที่ 3: หน้า Admin Dashboard (เพิ่ม/แก้ไขของรางวัล) -->
+    <!-- ส่วนที่ 3: หน้า Admin Dashboard -->
     <div id="adminDashboardSection" class="card hidden">
         <div class="header-img bg-danger">
-            Admin Management
+            Admin Monitor
         </div>
         <div class="card-body p-4">
-            <div id="adminHeader" class="text-center mb-4"></div>
+            <div id="adminHeader" class="text-center mb-3"></div>
             
-            <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-gift"></i> จัดการของรางวัล</h5>
-            <p class="text-muted small">กำหนดชื่อและจำนวนรางวัล เมื่อกดบันทึกระบบจะ Reset ยอดผู้รับเป็น 0 ใหม่ทันที</p>
+            <ul class="nav nav-tabs mb-3" id="adminTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="monitor-tab" data-bs-toggle="tab" data-bs-target="#monitor" type="button">Monitor & Winners</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button">จัดการของรางวัล</button>
+                </li>
+            </ul>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold text-primary">รางวัลรายการที่ 1</label>
-                <div class="input-group">
-                    <input type="text" id="p1_name" class="form-control" placeholder="ชื่อของรางวัล">
-                    <input type="number" id="p1_qty" class="form-control" placeholder="จำนวน" min="0" style="max-width: 100px;">
+            <div class="tab-content" id="adminTabContent">
+                <!-- TAB 1: MONITOR -->
+                <div class="tab-pane fade show active" id="monitor">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="m-0"><i class="bi bi-trophy"></i> สถานะรางวัล</h5>
+                        <button onclick="loadDashboardData()" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                    </div>
+
+                    <!-- แสดงสถานะของรางวัล -->
+                    <div class="row g-2 mb-4" id="prizeStatusContainer">
+                        <!-- JS จะสร้าง Card แสดงยอดคงเหลือที่นี่ -->
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3"><i class="bi bi-people"></i> ผู้โชคดีล่าสุด (20 คนแรก)</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>เวลา</th>
+                                    <th>ชื่อ</th>
+                                    <th>รางวัล</th>
+                                </tr>
+                            </thead>
+                            <tbody id="winnersTableBody">
+                                <tr><td colspan="3" class="text-center text-muted">กด Refresh เพื่อโหลดข้อมูล...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 2: SETTINGS (เหมือนเดิม) -->
+                <div class="tab-pane fade" id="settings">
+                    <div class="alert alert-warning small">
+                        <i class="bi bi-exclamation-triangle"></i> การบันทึกหน้าจอนี้จะทำการ <b>Reset ยอดผู้รับรางวัลเป็น 0</b> ทันที
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-primary">รางวัลที่ 1</label>
+                        <div class="input-group">
+                            <input type="text" id="p1_name" class="form-control" placeholder="ชื่อ">
+                            <input type="number" id="p1_qty" class="form-control" placeholder="จำนวน">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-primary">รางวัลที่ 2</label>
+                        <div class="input-group">
+                            <input type="text" id="p2_name" class="form-control" placeholder="ชื่อ">
+                            <input type="number" id="p2_qty" class="form-control" placeholder="จำนวน">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-primary">รางวัลที่ 3</label>
+                        <div class="input-group">
+                            <input type="text" id="p3_name" class="form-control" placeholder="ชื่อ">
+                            <input type="number" id="p3_qty" class="form-control" placeholder="จำนวน">
+                        </div>
+                    </div>
+                    <button onclick="saveConfig()" class="btn btn-success w-100 mt-3"><i class="bi bi-save"></i> บันทึกและ Reset ระบบ</button>
                 </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold text-primary">รางวัลรายการที่ 2</label>
-                <div class="input-group">
-                    <input type="text" id="p2_name" class="form-control" placeholder="ชื่อของรางวัล">
-                    <input type="number" id="p2_qty" class="form-control" placeholder="จำนวน" min="0" style="max-width: 100px;">
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold text-primary">รางวัลรายการที่ 3</label>
-                <div class="input-group">
-                    <input type="text" id="p3_name" class="form-control" placeholder="ชื่อของรางวัล">
-                    <input type="number" id="p3_qty" class="form-control" placeholder="จำนวน" min="0" style="max-width: 100px;">
-                </div>
-            </div>
-
-            <div class="d-grid gap-2 mt-4">
-                <button onclick="saveConfig()" class="btn btn-success btn-lg shadow">
-                    <i class="bi bi-save"></i> บันทึกและเริ่มรอบใหม่ (Reset)
-                </button>
-                <button onclick="location.reload()" class="btn btn-outline-secondary">ออกจากระบบ</button>
-            </div>
+            
+            <button onclick="location.reload()" class="btn btn-outline-secondary w-100 mt-4">ออกจากระบบ</button>
         </div>
     </div>
 
@@ -171,11 +170,82 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // *************** ตั้งค่า URL SCRIPT ที่นี่ ***************
-    // ใช้ URL ล่าสุดที่คุณเคยส่งมาให้ครับ
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOd1HpDdGZQqSrBaChSwbzEd9bd_HF9Da00dQJIEBWIbmAel28zhYRtGHScgkiy81J/exec'; 
-    // ******************************************************
+    // URL SCRIPT ล่าสุด
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwi8GcUK-OFH5wZUj2UKu5ME2-6XEGCM5RH_yXhbhn-Zg0SmJmlSf7FrsRiq1iJuPNN/exec'; 
 
+    // --- CONFIG คำถาม (แก้คำถามที่นี่) ---
+    // val: ค่าที่จะส่งไปหลังบ้าน (ต้องตรงกับ Code.gs) -> A, B, C
+    // text: ข้อความที่จะแสดงให้คนเห็น
+    const QUIZ_DATA = [
+        {
+            id: "q1",
+            question: "1. ใส่คำถามข้อที่ 1 ที่นี่?",
+            options: [
+                { val: "A", text: "ก. ตัวเลือกที่ 1" },
+                { val: "B", text: "ข. ตัวเลือกที่ 2 (ถูก)" }
+            ]
+        },
+        {
+            id: "q2",
+            question: "2. ใส่คำถามข้อที่ 2 ที่นี่?",
+            options: [
+                { val: "A", text: "ก. ตัวเลือกที่ 1 (ถูก)" },
+                { val: "B", text: "ข. ตัวเลือกที่ 2" }
+            ]
+        },
+        {
+            id: "q3",
+            question: "3. ใส่คำถามข้อที่ 3 ที่นี่?",
+            options: [
+                { val: "A", text: "ก. ตัวเลือกที่ 1" },
+                { val: "B", text: "ข. ตัวเลือกที่ 2" },
+                { val: "C", text: "ค. ตัวเลือกที่ 3 (ถูก)" }
+            ]
+        }
+    ];
+
+    // --- ฟังก์ชันสุ่มตัวเลือก ---
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // --- เริ่มต้นโหลดคำถาม (สุ่มทุกครั้ง) ---
+    window.onload = function() {
+        const container = document.getElementById('questionsContainer');
+        let html = '';
+
+        QUIZ_DATA.forEach((q, index) => {
+            // สุ่มลำดับตัวเลือก
+            let shuffledOptions = shuffleArray([...q.options]); 
+            
+            html += `
+                <div class="mb-4 p-3 bg-light rounded shadow-sm">
+                    <p class="fw-bold text-dark">${q.question}</p>
+                    <div class="list-group">
+            `;
+
+            shuffledOptions.forEach(opt => {
+                // สร้าง Unique ID สำหรับ input
+                const uniqueId = `${q.id}_${opt.val}_${Math.random().toString(36).substr(2, 9)}`;
+                html += `
+                    <label class="list-group-item d-flex gap-2 align-items-center">
+                        <input class="form-check-input flex-shrink-0" type="radio" name="${q.id}" value="${opt.val}" id="${uniqueId}">
+                        <span class="form-check-label stretched-link" for="${uniqueId}">${opt.text}</span>
+                    </label>
+                `;
+            });
+
+            html += `</div></div>`;
+        });
+
+        container.innerHTML = html;
+    };
+
+    // --- ADMIN LOGIC ---
     let currentAdminZone = '';
 
     function showAdminLogin() {
@@ -202,59 +272,99 @@
         if (valid) {
             document.getElementById('adminLoginSection').classList.add('hidden');
             document.getElementById('adminDashboardSection').classList.remove('hidden');
-            document.getElementById('adminHeader').innerHTML = `<h4>โซน: <span class="badge bg-warning text-dark">${currentAdminZone}</span></h4>`;
-            
-            // โหลดข้อมูลรางวัลปัจจุบัน
-            loadCurrentConfig();
+            document.getElementById('adminHeader').innerHTML = `<h4>Admin Zone: <span class="badge bg-warning text-dark">${currentAdminZone}</span></h4>`;
+            loadDashboardData();
         } else {
             Swal.fire('Error', 'Username หรือ Password ไม่ถูกต้อง', 'error');
         }
     }
 
-    function loadCurrentConfig() {
+    // ฟังก์ชันโหลดข้อมูล Dashboard (Config + Winners)
+    function loadDashboardData() {
         Swal.fire({ title: 'กำลังโหลดข้อมูล...', didOpen: () => Swal.showLoading() });
         
         fetch(SCRIPT_URL, {
             method: 'POST',
-            // เพิ่ม header text/plain เพื่อให้ Google Script รับค่าได้เสถียรขึ้น
             headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: 'get_config', zone: currentAdminZone })
+            body: JSON.stringify({ action: 'get_dashboard_data', zone: currentAdminZone })
         })
         .then(res => res.json())
         .then(data => {
             Swal.close();
             if (data.status === 'success') {
-                // นำข้อมูลมาใส่ในช่อง input พร้อมตัวดัก error (?. prevents crash)
-                document.getElementById('p1_name').value = data.p1?.name || '';
-                document.getElementById('p1_qty').value = data.p1?.max || 0;
-                
-                document.getElementById('p2_name').value = data.p2?.name || '';
-                document.getElementById('p2_qty').value = data.p2?.max || 0;
-
-                document.getElementById('p3_name').value = data.p3?.name || '';
-                document.getElementById('p3_qty').value = data.p3?.max || 0;
+                updateMonitorUI(data);
+                updateSettingsUI(data.config);
             } else {
-                 Swal.fire('Warning', 'ไม่สามารถดึงข้อมูลได้: ' + (data.message || 'Unknown error'), 'warning');
+                 Swal.fire('Warning', 'ดึงข้อมูลไม่สำเร็จ', 'warning');
             }
         })
         .catch(err => {
-            Swal.fire('Connection Error', 'ไม่สามารถเชื่อมต่อกับ Google Script ได้<br>กรุณาตรวจสอบว่าคุณได้อัปเดต Code ใน Apps Script แล้วหรือยัง?', 'error');
             console.error(err);
+            Swal.fire('Error', 'เชื่อมต่อระบบไม่ได้', 'error');
         });
+    }
+
+    function updateMonitorUI(data) {
+        // 1. อัปเดตการ์ดสถานะของรางวัล
+        const c = data.config;
+        const prizes = [c.p1, c.p2, c.p3];
+        let cardsHtml = '';
+        
+        prizes.forEach((p, idx) => {
+            if(p.name) {
+                const remaining = p.max - p.used;
+                const percent = p.max > 0 ? (remaining / p.max) * 100 : 0;
+                let colorClass = 'bg-success';
+                if(p.max > 0 && remaining === 0) colorClass = 'bg-secondary';
+                else if(percent < 30) colorClass = 'bg-danger';
+                else if(percent < 60) colorClass = 'bg-warning text-dark';
+
+                cardsHtml += `
+                    <div class="col-md-4">
+                        <div class="card text-white ${colorClass} h-100">
+                            <div class="card-body text-center p-2">
+                                <h6 class="card-title">${p.name}</h6>
+                                <h3 class="fw-bold">${remaining} / ${p.max}</h3>
+                                <small>แจกไปแล้ว: ${p.used}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        document.getElementById('prizeStatusContainer').innerHTML = cardsHtml;
+
+        // 2. อัปเดตตารางผู้ชนะ
+        let rowsHtml = '';
+        if (data.winners.length === 0) {
+            rowsHtml = '<tr><td colspan="3" class="text-center text-muted">- ยังไม่มีผู้ได้รับรางวัล -</td></tr>';
+        } else {
+            data.winners.forEach(w => {
+                rowsHtml += `<tr><td>${w.time}</td><td>${w.name}</td><td><span class="badge bg-success">${w.prize}</span></td></tr>`;
+            });
+        }
+        document.getElementById('winnersTableBody').innerHTML = rowsHtml;
+    }
+
+    function updateSettingsUI(config) {
+        document.getElementById('p1_name').value = config.p1?.name || '';
+        document.getElementById('p1_qty').value = config.p1?.max || 0;
+        document.getElementById('p2_name').value = config.p2?.name || '';
+        document.getElementById('p2_qty').value = config.p2?.max || 0;
+        document.getElementById('p3_name').value = config.p3?.name || '';
+        document.getElementById('p3_qty').value = config.p3?.max || 0;
     }
 
     function saveConfig() {
         Swal.fire({
-            title: 'ยืนยันการบันทึก?',
-            text: "ระบบจะอัปเดตของรางวัลและรีเซ็ตยอดผู้รับเป็น 0 ทันที",
+            title: 'ยืนยันการ Reset?',
+            text: "ระบบจะบันทึกของรางวัลใหม่ และรีเซ็ตยอดผู้รับเป็น 0",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'ยืนยัน'
+            confirmButtonText: 'ยืนยัน Reset'
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({ title: 'กำลังบันทึก...', didOpen: () => Swal.showLoading() });
-
-                // แปลงค่าจำนวนเป็น Integer เพื่อความชัวร์ในการส่งข้อมูล
                 const payload = {
                     action: 'update_config',
                     zone: currentAdminZone,
@@ -265,21 +375,16 @@
 
                 fetch(SCRIPT_URL, {
                     method: 'POST',
-                    // ใช้ text/plain เพื่อเลี่ยง CORS Preflight และช่วยให้ Apps Script อ่านข้อมูลง่ายขึ้น
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 })
                 .then(res => res.json())
-                .then(response => {
-                    if(response.status === 'success'){
-                        Swal.fire('Success', response.message, 'success');
+                .then(res => {
+                    if(res.status === 'success'){
+                        Swal.fire('Success', 'บันทึกเรียบร้อย', 'success').then(() => loadDashboardData());
                     } else {
-                        Swal.fire('Error', 'บันทึกไม่สำเร็จ: ' + response.message, 'error');
+                        Swal.fire('Error', res.message, 'error');
                     }
-                })
-                .catch(err => {
-                    Swal.fire('Error', 'เกิดข้อผิดพลาดในการบันทึก กรุณาตรวจสอบ Apps Script', 'error');
-                    console.error(err);
                 });
             }
         });
@@ -291,10 +396,11 @@
 
         if(!name) { Swal.fire('แจ้งเตือน', 'กรุณากรอกชื่อ-นามสกุล', 'warning'); return; }
 
-        const form = document.getElementById('quizForm');
-        const q1 = form.querySelector('input[name="q1"]:checked')?.value;
-        const q2 = form.querySelector('input[name="q2"]:checked')?.value;
-        const q3 = form.querySelector('input[name="q3"]:checked')?.value;
+        // เช็คคำตอบจาก input name="q1", "q2", "q3" (ซึ่งสร้างจาก JS)
+        const getVal = (q) => document.querySelector(`input[name="${q}"]:checked`)?.value;
+        const q1 = getVal('q1');
+        const q2 = getVal('q2');
+        const q3 = getVal('q3');
 
         if (!q1 || !q2 || !q3) {
             Swal.fire('แจ้งเตือน', 'กรุณาตอบคำถามให้ครบ', 'warning');
@@ -312,7 +418,7 @@
 
         fetch(SCRIPT_URL, { 
             method: 'POST', 
-            headers: { "Content-Type": "text/plain;charset=utf-8" }, // เพิ่ม header ตรงนี้ด้วย
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(data) 
         })
         .then(res => res.json())
@@ -321,7 +427,7 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'ยินดีด้วย!',
-                    html: `<h3 class="text-success">${response.message}</h3>`, // แสดงชื่อของรางวัล
+                    html: `<h3 class="text-success">${response.message}</h3>`,
                     confirmButtonText: 'ตกลง'
                 }).then(() => location.reload()); 
             } else if (response.score < 3) {
