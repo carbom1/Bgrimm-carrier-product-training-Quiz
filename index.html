@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กิจกรรมตอบคำถามชิงรางวัล</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #f0f2f5; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .hidden { display: none; }
+        .header-img { width: 100%; height: 150px; background-color: #0056b3; border-radius: 15px 15px 0 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold; }
+        .btn-custom { background-color: #0056b3; color: white; }
+        .btn-custom:hover { background-color: #004494; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5 mb-5" style="max-width: 600px;">
+    
+    <!-- ส่วนที่ 1: หน้าเล่นเกม + ข้อมูลผู้เล่น (หน้าแรกที่เปิดมาเจอ) -->
+    <div id="quizSection" class="card">
+        <div class="header-img">
+            B.Grimm Activity
+        </div>
+        <div class="card-body p-4">
+            
+            <!-- ส่วนข้อมูลผู้เล่น -->
+            <div class="alert alert-light border mb-4">
+                <h5 class="text-primary mb-3 fw-bold"><i class="bi bi-person-circle"></i> ข้อมูลผู้เล่น</h5>
+                <div class="mb-3">
+                    <label class="form-label">ชื่อ-นามสกุล / รหัสพนักงาน <span class="text-danger">*</span></label>
+                    <input type="text" id="userName" class="form-control" placeholder="กรอกชื่อของคุณ">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">เลือกโซนของคุณ <span class="text-danger">*</span></label>
+                    <select id="userZone" class="form-select">
+                        <option value="BKK">BKK (สำนักงานใหญ่/กรุงเทพฯ)</option>
+                        <option value="UPC">UPC (ต่างจังหวัด)</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <h5 class="fw-bold mb-3">ตอบคำถามชิงรางวัล</h5>
+            <form id="quizForm">
+                <!-- คำถามข้อ 1 -->
+                <div class="mb-4 p-3 bg-light rounded">
+                    <p class="fw-bold">1. ใส่คำถามข้อที่ 1 ที่นี่?</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q1" value="A" id="q1a">
+                        <label class="form-check-label" for="q1a">ก. ตัวเลือกที่ 1</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q1" value="B" id="q1b">
+                        <label class="form-check-label" for="q1b">ข. ตัวเลือกที่ 2 (ถูก)</label>
+                    </div>
+                </div>
+
+                <!-- คำถามข้อ 2 -->
+                <div class="mb-4 p-3 bg-light rounded">
+                    <p class="fw-bold">2. ใส่คำถามข้อที่ 2 ที่นี่?</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q2" value="A" id="q2a">
+                        <label class="form-check-label" for="q2a">ก. ตัวเลือกที่ 1 (ถูก)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q2" value="B" id="q2b">
+                        <label class="form-check-label" for="q2b">ข. ตัวเลือกที่ 2</label>
+                    </div>
+                </div>
+
+                <!-- คำถามข้อ 3 -->
+                <div class="mb-4 p-3 bg-light rounded">
+                    <p class="fw-bold">3. ใส่คำถามข้อที่ 3 ที่นี่?</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q3" value="A" id="q3a">
+                        <label class="form-check-label" for="q3a">ก. ตัวเลือกที่ 1</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q3" value="B" id="q3b">
+                        <label class="form-check-label" for="q3b">ข. ตัวเลือกที่ 2</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q3" value="C" id="q3c">
+                        <label class="form-check-label" for="q3c">ค. ตัวเลือกที่ 3 (ถูก)</label>
+                    </div>
+                </div>
+
+                <button type="button" onclick="submitQuiz()" class="btn btn-success w-100 btn-lg shadow-sm">ส่งคำตอบ</button>
+            </form>
+
+            <div class="mt-5 text-center">
+                <button onclick="showAdminLogin()" class="btn btn-link text-muted btn-sm" style="text-decoration: none;">
+                    <small>🔒 สำหรับเจ้าหน้าที่ (Admin Login)</small>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ส่วนที่ 2: หน้า Admin Login (ซ่อนอยู่) -->
+    <div id="adminLoginSection" class="card hidden">
+        <div class="header-img bg-dark">
+            Admin Login
+        </div>
+        <div class="card-body p-4">
+            <h5 class="text-center mb-4">เข้าสู่ระบบจัดการ</h5>
+            <form>
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="adminUser" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="adminPass" class="form-control">
+                </div>
+                <button type="button" onclick="adminLogin()" class="btn btn-dark w-100 mb-2">เข้าสู่ระบบ</button>
+                <button type="button" onclick="showQuiz()" class="btn btn-outline-secondary w-100">กลับหน้าหลัก</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ส่วนที่ 3: หน้า Admin Dashboard (ซ่อนอยู่) -->
+    <div id="adminDashboardSection" class="card hidden">
+        <div class="header-img bg-danger">
+            Admin Panel
+        </div>
+        <div class="card-body p-4 text-center">
+            <h4>จัดการระบบ (Reset รางวัล)</h4>
+            <p class="text-muted">กดปุ่มด้านล่างเพื่อรีเซ็ตนับจำนวนผู้ชนะของวันนี้ให้เป็น 0</p>
+            
+            <div id="adminControls" class="my-4">
+                <!-- ปุ่มจะโชว์ตาม User ที่ล็อกอิน -->
+            </div>
+
+            <button onclick="location.reload()" class="btn btn-outline-secondary">ออกจากระบบ</button>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // *************** ตั้งค่า URL SCRIPT ที่นี่ ***************
+    const SCRIPT_URL = 'วาง_URL_APPS_SCRIPT_ที่ได้จากการ_DEPLOY_ที่นี่'; 
+    // ******************************************************
+
+    // ฟังก์ชันสลับหน้า
+    function showAdminLogin() {
+        document.getElementById('quizSection').classList.add('hidden');
+        document.getElementById('adminLoginSection').classList.remove('hidden');
+    }
+
+    function showQuiz() {
+        document.getElementById('adminLoginSection').classList.add('hidden');
+        document.getElementById('quizSection').classList.remove('hidden');
+    }
+
+    function adminLogin() {
+        const user = document.getElementById('adminUser').value;
+        const pass = document.getElementById('adminPass').value;
+        let valid = false;
+        let zone = '';
+
+        if (user === 'BgrimmBKK' && pass === '123456') {
+            valid = true; zone = 'BKK';
+        } else if (user === 'BgrimmUPC' && pass === '123456') {
+            valid = true; zone = 'UPC';
+        }
+
+        if (valid) {
+            document.getElementById('adminLoginSection').classList.add('hidden');
+            document.getElementById('adminDashboardSection').classList.remove('hidden');
+            
+            const btnHtml = `
+                <div class="alert alert-info">คุณกำลังล็อกอินในฐานะ Admin โซน: <strong>${zone}</strong></div>
+                <button onclick="resetSystem('${zone}')" class="btn btn-danger btn-lg w-100 shadow">
+                    Reset รางวัลโซน ${zone}
+                </button>
+            `;
+            document.getElementById('adminControls').innerHTML = btnHtml;
+        } else {
+            Swal.fire('Error', 'Username หรือ Password ไม่ถูกต้อง', 'error');
+        }
+    }
+
+    function submitQuiz() {
+        // 1. ดึงข้อมูล User
+        const name = document.getElementById('userName').value.trim();
+        const zone = document.getElementById('userZone').value;
+
+        // Validation: ต้องกรอกชื่อ
+        if(!name) { 
+            Swal.fire('แจ้งเตือน', 'กรุณากรอกชื่อ-นามสกุล ก่อนส่งคำตอบ', 'warning'); 
+            return; 
+        }
+
+        // 2. ดึงข้อมูลคำตอบ
+        const form = document.getElementById('quizForm');
+        const q1 = form.querySelector('input[name="q1"]:checked')?.value;
+        const q2 = form.querySelector('input[name="q2"]:checked')?.value;
+        const q3 = form.querySelector('input[name="q3"]:checked')?.value;
+
+        // Validation: ต้องตอบครบทุกข้อ
+        if (!q1 || !q2 || !q3) {
+            Swal.fire('แจ้งเตือน', 'กรุณาตอบคำถามให้ครบทุกข้อ', 'warning');
+            return;
+        }
+
+        Swal.fire({ title: 'กำลังส่งคำตอบ...', didOpen: () => Swal.showLoading() });
+
+        // 3. ส่งข้อมูลไป Apps Script
+        const data = {
+            action: 'submit_quiz',
+            name: name,
+            zone: zone,
+            answers: { q1, q2, q3 }
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(response => {
+            if (response.isWinner) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'ยินดีด้วย!',
+                    text: response.message,
+                    confirmButtonText: 'ตกลง'
+                }).then(() => location.reload()); 
+            } else if (response.score < 3) {
+                 Swal.fire({
+                    icon: 'error',
+                    title: 'เสียใจด้วย',
+                    text: response.message,
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'รางวัลหมดแล้ว',
+                    text: response.message,
+                }).then(() => location.reload());
+            }
+        })
+        .catch(err => Swal.fire('Error', 'เกิดข้อผิดพลาด: ' + err, 'error'));
+    }
+
+    function resetSystem(zone) {
+        Swal.fire({
+            title: `ยืนยันการ Reset โซน ${zone}?`,
+            text: "จำนวนผู้ชนะจะถูกตั้งค่ากลับเป็น 0 สำหรับวันใหม่",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ใช่, Reset เลย'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading() });
+                
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'reset', zone: zone })
+                })
+                .then(res => res.json())
+                .then(response => {
+                    Swal.fire('Success', response.message, 'success');
+                });
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
