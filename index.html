@@ -172,8 +172,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // *************** ตั้งค่า URL SCRIPT ที่นี่ ***************
-    // อัปเดต URL เป็นตัวล่าสุดที่คุณส่งมาแล้วครับ
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDnBvvReWFnmRzDMh13Rq7MEICplCzBGVj64obsRX-InmD-jaOVDhMdIVhuPt5ucgR/exec'; 
+    // ใช้ URL ล่าสุดที่คุณเคยส่งมาให้ครับ
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOd1HpDdGZQqSrBaChSwbzEd9bd_HF9Da00dQJIEBWIbmAel28zhYRtGHScgkiy81J/exec'; 
     // ******************************************************
 
     let currentAdminZone = '';
@@ -216,6 +216,8 @@
         
         fetch(SCRIPT_URL, {
             method: 'POST',
+            // เพิ่ม header text/plain เพื่อให้ Google Script รับค่าได้เสถียรขึ้น
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({ action: 'get_config', zone: currentAdminZone })
         })
         .then(res => res.json())
@@ -252,16 +254,19 @@
             if (result.isConfirmed) {
                 Swal.fire({ title: 'กำลังบันทึก...', didOpen: () => Swal.showLoading() });
 
+                // แปลงค่าจำนวนเป็น Integer เพื่อความชัวร์ในการส่งข้อมูล
                 const payload = {
                     action: 'update_config',
                     zone: currentAdminZone,
-                    p1: { name: document.getElementById('p1_name').value, max: document.getElementById('p1_qty').value },
-                    p2: { name: document.getElementById('p2_name').value, max: document.getElementById('p2_qty').value },
-                    p3: { name: document.getElementById('p3_name').value, max: document.getElementById('p3_qty').value }
+                    p1: { name: document.getElementById('p1_name').value, max: parseInt(document.getElementById('p1_qty').value) || 0 },
+                    p2: { name: document.getElementById('p2_name').value, max: parseInt(document.getElementById('p2_qty').value) || 0 },
+                    p3: { name: document.getElementById('p3_name').value, max: parseInt(document.getElementById('p3_qty').value) || 0 }
                 };
 
                 fetch(SCRIPT_URL, {
                     method: 'POST',
+                    // ใช้ text/plain เพื่อเลี่ยง CORS Preflight และช่วยให้ Apps Script อ่านข้อมูลง่ายขึ้น
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 })
                 .then(res => res.json())
@@ -274,6 +279,7 @@
                 })
                 .catch(err => {
                     Swal.fire('Error', 'เกิดข้อผิดพลาดในการบันทึก กรุณาตรวจสอบ Apps Script', 'error');
+                    console.error(err);
                 });
             }
         });
@@ -304,7 +310,11 @@
             answers: { q1, q2, q3 }
         };
 
-        fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) })
+        fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            headers: { "Content-Type": "text/plain;charset=utf-8" }, // เพิ่ม header ตรงนี้ด้วย
+            body: JSON.stringify(data) 
+        })
         .then(res => res.json())
         .then(response => {
             if (response.isWinner) {
