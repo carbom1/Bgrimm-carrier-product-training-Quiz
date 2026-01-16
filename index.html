@@ -18,7 +18,8 @@
 
         body { 
             font-family: 'Kanit', sans-serif; 
-            background-color: var(--carrier-light); 
+            background: url('https://img2.pic.in.th/497636943_1163123512520863_7088822708332816805_n.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #333;
         }
         
@@ -27,6 +28,7 @@
             border-radius: 12px; 
             box-shadow: 0 8px 20px rgba(0,70,173,0.15); 
             overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.95); /* เพิ่มความโปร่งแสงเล็กน้อยเพื่อให้เห็นพื้นหลังลางๆ */
         }
 
         .hidden { display: none; }
@@ -272,7 +274,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // URL SCRIPT 
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz443OV6SnO_AcCkFt0gIYoewBPalyTGithYyVd_vmh4nLSHHo6PuGUtXlonuOap4Ut/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwi8GcUK-OFH5wZUj2UKu5ME2-6XEGCM5RH_yXhbhn-Zg0SmJmlSf7FrsRiq1iJuPNN/exec'; 
 
     // --- CONFIG คำถาม (Carrier 2026) ---
     const QUIZ_DATA = [
@@ -308,13 +310,13 @@
         },
         {
             id: "q3",
-            question: "3. รางวัลใหญ่สำหรับช่างที่ทำคะแนนได้สูงสุดใน 20 อันดับแรก (Top 20) ของโครงการคืออะไร?",
+            question: "3. รางวัลใหญ่ประจำปี 2569 ของทางโครงการเพื่อนแท้ช่างแอร์คืออะไร?",
             type: "radio", 
             options: [
                 { val: "A", text: "ทริปเที่ยวต่างประเทศ" }, // ถูก
                 { val: "B", text: "รถจักรยานยนต์" },
                 { val: "C", text: "ชุดอุปกรณ์เครื่องมือช่างมาตรฐาน" },
-                { val: "D", text: "ใบประกาศนียบัตร Best 25 ช่างมาตรฐาน" }
+                { val: "D", text: "ใบประกาศนียบัตรรับรองมาตรฐาน (Certificate)" }
             ]
         }
     ];
@@ -567,4 +569,3 @@
 
 </body>
 </html>
-
