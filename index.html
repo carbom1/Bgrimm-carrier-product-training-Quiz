@@ -288,26 +288,28 @@
                 { val: "D", text: "รุ่น : Copper 7  รหัสโมเดล : TSAA" },
                 { val: "E", text: "รุ่น : Tech V  รหัสโมเดล : NVAA" }, // ถูก
                 { val: "F", text: "รุ่น : Copper 10  รหัสโมเดล : TVDA" },
-                { val: "G", text: "รุ่น : New Gen  รหัสโมเดล : TVDA" },
+                // ลบตัวเลือก New Gen (TVDA) ออกตามที่แจ้ง
                 { val: "H", text: "รุ่น : Copper 11  รหัสโมเดล : TVEA" },
                 { val: "I", text: "รุ่น : X-inverter Plus  รหัสโมเดล : TVAB" }
             ]
         },
         {
             id: "q2",
-            question: "2. จากตารางสรุปคะแนน เครื่องปรับอากาศแคเรียร์รุ่นใดที่ให้คะแนนสะสมในโครงการได้สูงสุด?",
-            type: "radio", // เปลี่ยนเป็น radio เลือกข้อเดียว
+            question: "2. จากตารางสรุปคะแนน เครื่องปรับอากาศแคเรียร์รุ่นใดที่ให้คะแนนสะสมในโครงการได้สูงสุด? และกี่คะแนน?",
+            type: "radio", 
             options: [
-                { val: "A", text: "X-inverter Plus" },
-                { val: "B", text: "Copper 10" },
-                { val: "C", text: "Copper 7" },
-                { val: "D", text: "Copper-Ion" }
+                { val: "A", text: "Copper-Seal (TVDA) 500" },
+                { val: "B", text: "Copper-Ion (TVEB) 600" }, 
+                { val: "C", text: "X-inverter Plus (TVAB) 500" },
+                { val: "D", text: "color smart (TVCA) 600" },
+                { val: "E", text: "Tech V (NVAA) 500" },
+                { val: "F", text: "Copper 11 (TVEA) 600" }
             ]
         },
         {
             id: "q3",
             question: "3. รางวัลใหญ่สำหรับช่างที่ทำคะแนนได้สูงสุดใน 20 อันดับแรก (Top 20) ของโครงการคืออะไร?",
-            type: "radio", // เปลี่ยนเป็น radio เลือกข้อเดียว
+            type: "radio", 
             options: [
                 { val: "A", text: "ชุดอุปกรณ์เครื่องมือช่างมาตรฐาน" }, 
                 { val: "B", text: 'ใบประกาศนียบัตร "Best 25 ช่างมาตรฐาน"' },
