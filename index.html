@@ -11,7 +11,7 @@
     <style>
         /* Carrier Theme Colors */
         :root {
-            --carrier-blue: #0046AD; /* สีน้ำเงินหลัก Carrier */
+            --carrier-blue: #0046AD;
             --carrier-light: #E6F0FA;
             --carrier-dark: #002A66;
         }
@@ -28,7 +28,7 @@
             border-radius: 12px; 
             box-shadow: 0 8px 20px rgba(0,70,173,0.15); 
             overflow: hidden;
-            background-color: rgba(255, 255, 255, 0.95); /* เพิ่มความโปร่งแสงเล็กน้อยเพื่อให้เห็นพื้นหลังลางๆ */
+            background-color: rgba(255, 255, 255, 0.95);
         }
 
         .hidden { display: none; }
@@ -41,7 +41,7 @@
         }
 
         .header-logo {
-            max-width: 250px; /* ปรับขนาดโลโก้ตามความเหมาะสม */
+            max-width: 250px;
             height: auto;
             margin-bottom: 10px;
         }
@@ -122,7 +122,6 @@
     
     <!-- ส่วนที่ 1: หน้าเล่นเกม -->
     <div id="quizSection" class="card">
-        <!-- ส่วนหัวแบบใหม่ ใส่รูปและข้อความตามที่ขอ -->
         <div class="header-section">
             <img src="https://img2.pic.in.th/final-Logo-CarrierCampaign-2025.png" alt="Carrier Campaign 2025" class="header-logo">
             <div class="header-title">โครงการเพื่อนแท้ช่างแอร์</div>
@@ -273,10 +272,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // URL SCRIPT 
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzki5c9e2P-LyDsqBPZRl1LrNNKPO_KYIfaGlebM_J_WXQMgY_I9SB_RwvccObczBrp/exec'; 
+    // URL SCRIPT ที่ Deploy ใหม่ล่าสุด
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxs7Sqf-zzmxaJS00hMfL8qQ-M7SfyUOodE7MfszzAexn9T-mRR1z_XTMQKRHzPuTPg/exec'; 
 
-    // --- CONFIG คำถาม (Carrier 2026) ---
+    // --- CONFIG คำถาม (Carrier 2026 - อัปเดตใหม่) ---
     const QUIZ_DATA = [
         {
             id: "q1",
@@ -296,27 +295,24 @@
         },
         {
             id: "q2",
-            question: "2. แอร์ Carrier รุ่นไหนบ้างครับที่มีระบบสวิง 4 ทิศทาง (ขึ้น-ลง-ซ้าย-ขวา)? (เลือกตอบได้หลายข้อ)",
-            type: "checkbox",
+            question: "2. จากตารางสรุปคะแนน เครื่องปรับอากาศแคเรียร์รุ่นใดที่ให้คะแนนสะสมในโครงการได้สูงสุด?",
+            type: "radio", // เปลี่ยนเป็น radio เลือกข้อเดียว
             options: [
-                { val: "A", text: "รุ่น : Copper-Ion  รหัสโมเดล : TVEB" }, // ถูก
-                { val: "B", text: "รุ่น : Copper-Seal  รหัสโมเดล : TVDB" },
-                { val: "C", text: "รุ่น : Copper 10  รหัสโมเดล : TVDA" },
-                { val: "D", text: "รุ่น : Copper 11  รหัสโมเดล : TVEA" },
-                { val: "E", text: "รุ่น : X-inverter Plus  รหัสโมเดล : TVAB" }, // ถูก
-                { val: "F", text: "รุ่น : Tech S  รหัสโมเดล : NSAA" },
-                { val: "G", text: "รุ่น : Tech V  รหัสโมเดล : NVAA" }
+                { val: "A", text: "X-inverter Plus" },
+                { val: "B", text: "Copper 10" },
+                { val: "C", text: "Copper 7" },
+                { val: "D", text: "Copper-Ion" }
             ]
         },
         {
             id: "q3",
-            question: "3. รางวัลใหญ่ประจำปี 2569 ของทางโครงการเพื่อนแท้ช่างแอร์คืออะไร?",
-            type: "radio", 
+            question: "3. รางวัลใหญ่สำหรับช่างที่ทำคะแนนได้สูงสุดใน 20 อันดับแรก (Top 20) ของโครงการคืออะไร?",
+            type: "radio", // เปลี่ยนเป็น radio เลือกข้อเดียว
             options: [
-                { val: "A", text: "ทริปเที่ยวต่างประเทศ" }, // ถูก
-                { val: "B", text: "รถจักรยานยนต์" },
-                { val: "C", text: "ชุดอุปกรณ์เครื่องมือช่างมาตรฐาน" },
-                { val: "D", text: "ใบประกาศนียบัตรรับรองมาตรฐาน (Certificate)" }
+                { val: "A", text: "ชุดอุปกรณ์เครื่องมือช่างมาตรฐาน" }, 
+                { val: "B", text: 'ใบประกาศนียบัตร "Best 25 ช่างมาตรฐาน"' },
+                { val: "C", text: "รถจักรยานยนต์ Wave 125i" },
+                { val: "D", text: "ทริปท่องเที่ยวต่างประเทศ" }
             ]
         }
     ];
@@ -525,8 +521,11 @@
         };
 
         const q1 = getAnswer('q1', 'checkbox');
-        const q2 = getAnswer('q2', 'checkbox');
+        const q2 = getAnswer('q2', 'radio');
         const q3 = getAnswer('q3', 'radio');
+
+        // Log คำตอบเพื่อตรวจสอบ (กด F12 -> Console)
+        console.log("Q1:", q1, "Q2:", q2, "Q3:", q3);
 
         if (!q1 || !q2 || !q3) {
             Swal.fire('แจ้งเตือน', 'กรุณาตอบคำถามให้ครบทุกข้อ', 'warning');
@@ -569,4 +568,3 @@
 
 </body>
 </html>
-
